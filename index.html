@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Câu Cá Kiên Quân</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="spinner-column">
+            <div class="spinner-header">
+                <h1>Hồ Câu Cá Kiên Quân - Lucky Spinner</h1>
+                <div id="clock"></div>
+            </div>
+            
+            <div id="soHienThi">--</div>
+            
+            <div class="action-buttons">
+                <button id="nutQuay">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                    <span>QUAY SỐ</span>
+                </button>
+            </div>
+            
+            <div class="settings-container">
+                <button class="mode-button active" data-value="1">1 số</button>
+                <button class="mode-button" data-value="2">2 số</button>
+                <button class="mode-button" data-value="3">3 số</button>
+                <button class="mode-button" data-value="4">4 số</button>
+                <button class="mode-button" data-value="5">5 số</button>
+            </div>
+        </div>
+
+        <div class="history-column">
+            <h2>Các Số Đã Quay <span id="historyCount">(0/100)</span></h2>
+            <ul id="danhSachDaQuay"></ul>
+            <div class="history-actions">
+                <button id="nutUndo" title="Quay lại lượt trước">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                </button>
+                <button id="nutReset" title="Làm mới và xóa lịch sử">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
