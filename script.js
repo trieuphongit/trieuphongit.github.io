@@ -222,7 +222,7 @@ function thucHienQuaySo() {
             });
 
             if (diemBatDauHopLe.length === 0) { 
-                hienThiKetQua(`Hết chuỗi ${soLuongQuay} số!`); 
+                hienThiKetQua(`Out of ${soLuongQuay} number!`); 
                 nutQuayElement.disabled = false; return; 
             }
             const diemBatDauNgauNhien = diemBatDauHopLe[Math.floor(Math.random() * diemBatDauHopLe.length)];
@@ -241,7 +241,7 @@ function thucHienQuaySo() {
         updateUndoButtonState();
 
         if (cacSoCoTheQuay.length === 0) {
-           hienThiKetQua("Hết số!");
+           hienThiKetQua("Out of number!");
            nutQuayElement.disabled = true;
         } else {
            nutQuayElement.disabled = false;
