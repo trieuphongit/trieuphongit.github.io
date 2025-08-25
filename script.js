@@ -8,12 +8,19 @@ const historyCountElement = document.getElementById('historyCount');
 const clockElement = document.getElementById('clock');
 const nutUndoElement = document.getElementById('nutUndo');
 
+// **MỚI**: Lấy các phần tử cài đặt khoảng số
+const startNumInput = document.getElementById('startNumInput');
+const endNumInput = document.getElementById('endNumInput');
+const setRangeBtn = document.getElementById('setRangeBtn');
+
+
 // Khai báo biến trạng thái
 let currentMode = 1, cacSoCoTheQuay = [], lichSuDaQuay = [], turnIndex = 0;
+let startNum = 0, endNum = 100; // **MỚI**: Biến cho khoảng số
 const turnColorClasses = ['spin-turn-0', 'spin-turn-1', 'spin-turn-2', 'spin-turn-3', 'spin-turn-4', 'spin-turn-5'];
 const STORAGE_KEY = 'modernRandomSpinnerState';
 
-// --- CÁC HÀM TIỆN ÍCH MỚI ---
+// --- CÁC HÀM TIỆN ÍCH ---
 function updateClock() {
     const now = new Date();
     const h = String(now.getHours()).padStart(2, '0');
@@ -22,9 +29,11 @@ function updateClock() {
     clockElement.textContent = `${h}:${m}:${s}`;
 }
 
+// **CẬP NHẬT**: Hàm này giờ sẽ dựa vào startNum và endNum
 function updateHistoryCount() {
-    const spunCount = 101 - cacSoCoTheQuay.length;
-    historyCountElement.textContent = `(${spunCount}/100)`;
+    const totalNumbers = (endNum - startNum) + 1;
+    const spunCount = totalNumbers - cacSoCoTheQuay.length;
+    historyCountElement.textContent = `(${spunCount}/${totalNumbers})`;
 }
 
 function updateUndoButtonState() {
@@ -32,47 +41,64 @@ function updateUndoButtonState() {
 }
 
 // --- CÁC HÀM LƯU/TẢI/RESET ---
+// **CẬP NHẬT**: Lưu cả khoảng số
 function saveState() {
-    const state = { cacSoCoTheQuay, lichSuDaQuay, turnIndex };
+    const state = { cacSoCoTheQuay, lichSuDaQuay, turnIndex, startNum, endNum };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
+// **CẬP NHẬT**: Tải cả khoảng số và cập nhật ô input
 function loadState() {
     const savedStateJSON = localStorage.getItem(STORAGE_KEY);
     if (savedStateJSON) {
         const savedState = JSON.parse(savedStateJSON);
+        // Tải khoảng số trước, nếu không có thì dùng mặc định
+        startNum = savedState.startNum !== undefined ? savedState.startNum : 0;
+        endNum = savedState.endNum !== undefined ? savedState.endNum : 100;
+
         cacSoCoTheQuay = savedState.cacSoCoTheQuay;
         lichSuDaQuay = savedState.lichSuDaQuay;
         turnIndex = savedState.turnIndex;
+        
+        // Nếu không có mảng số nào được lưu, khởi tạo lại từ khoảng số
+        if (!cacSoCoTheQuay || cacSoCoTheQuay.length === 0 && lichSuDaQuay.length === 0) {
+            initializeNumbers();
+        }
+
         renderHistory();
-        if (cacSoCoTheQuay.length === 0) {
+
+        if (cacSoCoTheQuay.length === 0 && lichSuDaQuay.length > 0) {
             hienThiKetQua("Hết số!");
             nutQuayElement.disabled = true;
         }
     } else {
         initializeState();
     }
+    // Cập nhật giá trị cho ô input
+    startNumInput.value = startNum;
+    endNumInput.value = endNum;
+
     updateHistoryCount();
     updateUndoButtonState();
 }
 
 function resetState() {
-     if (confirm('Bạn có chắc chắn muốn làm mới và xóa toàn bộ lịch sử không?')) {
-        localStorage.removeItem(STORAGE_KEY);
-        location.reload();
+     if (confirm('Bạn có chắc chắn muốn làm mới và xóa toàn bộ lịch sử không? Thao tác này sẽ giữ lại khoảng số bạn đã chọn.')) {
+        initializeState(); // Khởi tạo lại trạng thái thay vì reload
+        renderHistory();
+        updateHistoryCount();
+        updateUndoButtonState();
+        hienThiKetQua("--");
+        nutQuayElement.disabled = false;
+        saveState();
     }
 }
 
 function undoLastSpin() {
     if (lichSuDaQuay.length === 0) return;
-
     const lastSpin = lichSuDaQuay.pop();
-    const numbersToRestore = lastSpin.numbers;
-
-    cacSoCoTheQuay.push(...numbersToRestore);
-    
+    cacSoCoTheQuay.push(...lastSpin.numbers);
     turnIndex--;
-    
     renderHistory();
     hienThiKetQua('--');
     nutQuayElement.disabled = false;
@@ -81,9 +107,49 @@ function undoLastSpin() {
     saveState();
 }
 
+// **MỚI**: Hàm áp dụng khoảng số
+function applyRange() {
+    const newStart = parseInt(startNumInput.value, 10);
+    const newEnd = parseInt(endNumInput.value, 10);
+
+    // Xác thực đầu vào
+    if (isNaN(newStart) || isNaN(newEnd)) {
+        alert("Vui lòng nhập số hợp lệ.");
+        return;
+    }
+    if (newStart >= newEnd) {
+        alert("Số bắt đầu phải nhỏ hơn số kết thúc.");
+        return;
+    }
+    if ((newEnd - newStart) > 2000) { // Giới hạn để tránh treo trình duyệt
+        alert("Khoảng số quá lớn (tối đa 2000 số).");
+        return;
+    }
+
+    if (confirm('Thay đổi khoảng số sẽ làm mới vòng quay và xóa lịch sử. Bạn có chắc chắn?')) {
+        startNum = newStart;
+        endNum = newEnd;
+        initializeState(); // Reset mọi thứ với khoảng số mới
+        renderHistory();
+        updateHistoryCount();
+        updateUndoButtonState();
+        hienThiKetQua("--");
+        nutQuayElement.disabled = false;
+        saveState();
+        alert(`Đã áp dụng khoảng số mới từ ${startNum} đến ${endNum}.`);
+    }
+}
+
+
 // --- CÁC HÀM TIỆN ÍCH KHÁC ---
+// **MỚI**: Tách phần tạo mảng số ra hàm riêng
+function initializeNumbers() {
+    cacSoCoTheQuay = Array.from({ length: (endNum - startNum) + 1 }, (_, i) => startNum + i);
+}
+
+// **CẬP NHẬT**: initializeState giờ sẽ reset mọi thứ
 function initializeState() {
-    cacSoCoTheQuay = Array.from({ length: 101 }, (_, i) => i);
+    initializeNumbers();
     lichSuDaQuay = [];
     turnIndex = 0;
 }
@@ -121,9 +187,13 @@ function capNhatDanhSachDaQuayUI(cacSoMoi, turnClass) {
 }
 
 // --- HÀM QUAY SỐ CHÍNH ---
+// **CẬP NHẬT**: Sửa lại logic kiểm tra chuỗi liên tiếp
 function thucHienQuaySo() {
     const soLuongQuay = currentMode;
-    if (cacSoCoTheQuay.length < soLuongQuay) { return; }
+    if (cacSoCoTheQuay.length < soLuongQuay) {
+        alert("Không đủ số để quay.");
+        return;
+    }
 
     nutQuayElement.disabled = true;
     soHienThiElement.classList.add('spinning');
@@ -142,16 +212,17 @@ function thucHienQuaySo() {
             const chiSoNgauNhien = Math.floor(Math.random() * cacSoCoTheQuay.length);
             chuoiTrungThuong.push(cacSoCoTheQuay[chiSoNgauNhien]);
         } else {
-            const diemBatDauHopLe = cacSoCoTheQuay.filter(startNum => {
-                if (startNum > 101 - soLuongQuay) return false;
+            const diemBatDauHopLe = cacSoCoTheQuay.filter(start => {
+                // Điều kiện mới: điểm bắt đầu không được quá gần cuối mảng
+                if (start > endNum - soLuongQuay + 1) return false;
                 for (let j = 1; j < soLuongQuay; j++) {
-                    if (!cacSoCoTheQuay.includes(startNum + j)) return false;
+                    if (!cacSoCoTheQuay.includes(start + j)) return false;
                 }
                 return true;
             });
 
             if (diemBatDauHopLe.length === 0) { 
-                hienThiKetQua(`Out of ${soLuongQuay} number!`); 
+                hienThiKetQua(`Hết chuỗi ${soLuongQuay} số!`); 
                 nutQuayElement.disabled = false; return; 
             }
             const diemBatDauNgauNhien = diemBatDauHopLe[Math.floor(Math.random() * diemBatDauHopLe.length)];
@@ -170,7 +241,7 @@ function thucHienQuaySo() {
         updateUndoButtonState();
 
         if (cacSoCoTheQuay.length === 0) {
-           hienThiKetQua("Out of number!");
+           hienThiKetQua("Hết số!");
            nutQuayElement.disabled = true;
         } else {
            nutQuayElement.disabled = false;
@@ -190,6 +261,7 @@ modeButtons.forEach(button => {
 nutQuayElement.addEventListener('click', thucHienQuaySo);
 nutResetElement.addEventListener('click', resetState);
 nutUndoElement.addEventListener('click', undoLastSpin);
+setRangeBtn.addEventListener('click', applyRange); // **MỚI**
 
 // Khởi chạy đồng hồ và tải trạng thái
 updateClock();
