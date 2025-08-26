@@ -1,9 +1,9 @@
-
+/* ===== BIẾN MÀU MỚI (TÔNG ĐỎ) ===== */
 :root {
-    --primary-color: #6a5af9;
-    --primary-light: #f0eeff;
-    --background-color: #f4f7fd;
-    --text-color: #343a40;
+    --primary-color: #D92525;      /* Màu đỏ chủ đạo */
+    --primary-light: #FEE2E2;     /* Màu đỏ rất nhạt */
+    --background-color: #f8f8f8;
+    --text-color: #242424;
     --text-light: #6c757d;
     --border-color: #dee2e6;
     --card-padding: 30px;
@@ -23,24 +23,59 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-image: radial-gradient(circle at top right, #d5d3ff, var(--background-color) 40%);
+    /* Nền gradient mới tông đỏ */
+    background-image: radial-gradient(circle at top right, #FFD5D5, var(--background-color) 40%);
     margin: 0;
-    padding: 20px;
     color: var(--text-color);
     box-sizing: border-box;
-    height: 100vh;
+    /* Layout mới để chứa header */
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    min-height: 100vh;
     animation: fadeIn 0.8s ease-out;
 }
+
+/* ===== HEADER MỚI ===== */
+.site-header {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    width: 100%;
+    box-sizing: border-box;
+}
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.logo-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text-color);
+}
+.logo-svg {
+    width: 32px;
+    height: 32px;
+    color: var(--primary-color);
+}
+.site-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+/* ======================== */
+
 
 .main-wrapper {
     display: flex;
     width: 100%;
-    height: 100%;
     max-width: 1200px;
-    max-height: 90vh;
+    margin: 0 auto; /* Căn giữa nội dung chính */
+    padding: 20px;
+    box-sizing: border-box;
+    flex-grow: 1; /* Để wrapper chiếm hết không gian còn lại */
     gap: 20px;
 }
 
@@ -63,8 +98,8 @@ body {
 .history-column { flex: 1; }
 
 @media (max-width: 900px) {
-    body { padding: 10px; height: auto; min-height: 100vh; }
-    .main-wrapper { flex-direction: column; max-height: none; }
+    body { min-height: 100vh; }
+    .main-wrapper { flex-direction: column; padding: 10px; }
     .history-column { max-height: 50vh; }
 }
 
@@ -75,159 +110,113 @@ body {
     margin-bottom: 20px;
 }
 
-h1 {
-    margin: 0;
-    color: var(--text-color);
-    font-size: 1.6rem;
-    font-weight: 600;
-}
+h1 { margin: 0; color: var(--text-color); font-size: 1.6rem; font-weight: 600; }
 h2 {
-    margin: 0;
-    color: var(--text-color);
-    font-size: 1.2rem;
-    font-weight: 600;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 15px;
-    margin-bottom: 15px;
+    margin: 0; color: var(--text-color); font-size: 1.2rem; font-weight: 600;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px;
 }
+h3 { margin: 0; font-size: 1.2rem; font-weight: 600; color: var(--text-color); }
+
 #historyCount {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-light);
-    background-color: var(--background-color);
-    padding: 4px 10px;
-    border-radius: 12px;
+    font-size: 0.9rem; font-weight: 500; color: var(--text-light);
+    background-color: #f1f1f1; padding: 4px 10px; border-radius: 12px;
 }
 
 #clock {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-light);
-    background-color: var(--background-color);
-    padding: 8px 15px;
-    border-radius: 12px;
+    font-size: 0.9rem; font-weight: 500; color: var(--text-light);
+    background-color: #f1f1f1; padding: 8px 15px; border-radius: 12px;
 }
 
 .settings-container {
-    margin-bottom: auto; /* Đẩy xuống dưới cùng */
-    padding-top: 20px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
+    margin-bottom: 20px; padding-top: 20px;
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;
 }
 
 .mode-button {
-    padding: 10px 18px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    background-color: white;
-    color: var(--text-light);
-    cursor: pointer;
-    transition: all 0.2s ease;
+    padding: 10px 18px; font-size: 0.9rem; font-weight: 500;
+    border: 1px solid var(--border-color); border-radius: 20px;
+    background-color: white; color: var(--text-light); cursor: pointer; transition: all 0.2s ease;
 }
 .mode-button:hover { background-color: var(--primary-light); color: var(--primary-color); }
 .mode-button.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
 
+
+/* ===== ĐÃ CẬP NHẬT PHẦN NÀY ===== */
 #soHienThi {
     font-size: 5.5rem;
     font-weight: 700;
     color: var(--primary-color);
-    text-shadow: 0 4px 15px rgba(106, 90, 249, 0.2);
+    text-shadow: 0 4px 15px rgba(217, 37, 37, 0.2);
     border: 2px solid var(--primary-light);
     border-radius: var(--border-radius);
     min-height: 180px;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap; 
-    gap: 15px;
-    margin: auto 0; /* Căn giữa theo chiều dọc */
+    flex-wrap: wrap;
+    padding: 10px; /* Thêm padding để số không bị sát viền */
+    box-sizing: border-box;
+    margin: auto 0;
     transition: transform 0.2s ease-in-out;
 }
+/* ==================================== */
+
 #soHienThi.spinning { animation: spin-effect 0.1s ease-in-out infinite alternate; }
 #soHienThi .so-ket-qua { display: inline-block; }
 
+/* ===== CLASS MỚI CHO DẤU PHẨY ===== */
+#soHienThi .so-separator {
+    display: inline-block;
+    margin: 0 10px; /* Tạo khoảng cách xung quanh dấu phẩy */
+    font-weight: 600;
+    color: var(--text-light); /* Cho dấu phẩy có màu nhạt hơn */
+    transform: translateY(-5px); /* Dịch chuyển dấu phẩy lên một chút cho đẹp hơn */
+}
+/* ================================== */
+
+
 .action-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-bottom: 20px;
+    display: flex; gap: 15px; justify-content: center; margin-bottom: 20px;
 }
 
 #nutQuay {
-    padding: 15px 30px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: white;
-    background-image: linear-gradient(45deg, var(--primary-color) 0%, #897fff 100%);
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    box-shadow: 0 4px 15px rgba(106, 90, 249, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    padding: 15px 30px; font-size: 1.1rem; font-weight: 600; color: white;
+    background-image: linear-gradient(45deg, var(--primary-color) 0%, #F24E4E 100%);
+    border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s ease;
+    width: 100%; box-shadow: 0 4px 15px rgba(217, 37, 37, 0.3);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
 }
-#nutQuay:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(106, 90, 249, 0.4); }
-#nutQuay:disabled { background-image: none; background-color: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
+#nutQuay:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(217, 37, 37, 0.4); }
+#nutQuay:disabled {
+    background-image: none; background-color: #ccc; cursor: not-allowed;
+    box-shadow: none; transform: none;
+}
 
 .history-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: auto; /* Đẩy xuống dưới cùng của flex container */
-    padding-top: 15px;
+    display: flex; gap: 10px; margin-top: auto; padding-top: 15px;
 }
 
 #nutReset, #nutUndo {
-    height: 54px;
-    flex-grow: 1; /* Cho các nút chia đều không gian */
-    padding: 0;
-    color: var(--text-light);
-    background-color: var(--background-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 54px; flex-grow: 1; padding: 0; color: var(--text-light);
+    background-color: #f1f1f1; border: 1px solid var(--border-color);
+    border-radius: 12px; cursor: pointer; transition: all 0.3s ease;
+    display: flex; align-items: center; justify-content: center;
 }
-#nutReset:hover { border-color: #dc3545; color: #dc3545;}
+#nutReset:hover { border-color: #D92525; color: #D92525;}
 #nutUndo:hover { border-color: var(--primary-color); color: var(--primary-color); transform: scale(1.05); }
 #nutUndo:disabled {
-    color: #ccc;
-    background-color: #f8f9fa;
-    cursor: not-allowed;
-    transform: none;
-    border-color: var(--border-color);
+    color: #ccc; background-color: #f8f9fa; cursor: not-allowed;
+    transform: none; border-color: var(--border-color);
 }
 
 #danhSachDaQuay {
-    list-style-type: none;
-    padding: 5px;
-    margin: 0 -5px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    overflow-y: auto;
-    flex-grow: 1;
-    align-content: flex-start;
+    list-style-type: none; padding: 5px; margin: 0 -5px; display: flex;
+    flex-wrap: wrap; gap: 10px; overflow-y: auto; flex-grow: 1; align-content: flex-start;
 }
 #danhSachDaQuay li {
-    padding: 8px 14px;
-    border-radius: 12px;
-    font-weight: 500;
-    font-size: 0.9rem;
-    transition: transform 0.2s ease;
+    padding: 8px 14px; border-radius: 12px; font-weight: 500;
+    font-size: 0.9rem; transition: transform 0.2s ease;
 }
 #danhSachDaQuay li:hover { transform: translateY(-2px); }
 
@@ -238,68 +227,66 @@ h2 {
 .spin-turn-4 { background-color: #fff0f6; color: #d6336c; }
 .spin-turn-5 { background-color: #e9ecef; color: #495057; }
 
-#danhSachDaQuay li:hover { transform: translateY(-2px); }
 
-.spin-turn-0 { background-color: #e7f5ff; color: #1c7ed6; }
-.spin-turn-1 { background-color: #fff9db; color: #f08c00; }
-.spin-turn-2 { background-color: #d3f9d8; color: #2f9e44; }
-.spin-turn-3 { background-color: #f8f0fc; color: #ae3ec9; }
-.spin-turn-4 { background-color: #fff0f6; color: #d6336c; }
-.spin-turn-5 { background-color: #e9ecef; color: #495057; }
-
-
-/* ===== CSS MỚI CHO PHẦN NHẬP KHOẢNG SỐ ===== */
-.range-settings {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin: 20px 0;
-    flex-wrap: wrap;
+.settings-trigger-btn {
+    width: 100%; padding: 12px; margin-top: auto; font-size: 1rem;
+    font-weight: 500; color: var(--text-light); background-color: #f1f1f1;
+    border: 1px solid var(--border-color); border-radius: 12px; cursor: pointer;
+    transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.settings-trigger-btn:hover {
+    color: var(--primary-color); border-color: var(--primary-color); background-color: var(--primary-light);
 }
 
-.input-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5); z-index: 1000;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
 }
-
-.range-settings label {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-light);
+.modal.active { opacity: 1; pointer-events: auto; }
+.modal-content {
+    background-color: white; border-radius: var(--border-radius);
+    box-shadow: var(--shadow); width: 90%; max-width: 450px;
+    transform: scale(0.95); transition: transform 0.3s ease;
 }
-
-.range-settings input[type="number"] {
-    width: 80px;
-    padding: 8px 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-    text-align: center;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.modal.active .modal-content { transform: scale(1); }
+.modal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 25px; border-bottom: 1px solid var(--border-color);
 }
-
-.range-settings input[type="number"]:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px var(--primary-light);
+.close-btn {
+    background: none; border: none; font-size: 2rem;
+    line-height: 1; color: var(--text-light); cursor: pointer; transition: color 0.2s;
 }
-
+.close-btn:hover { color: var(--text-color); }
+.modal-body { padding: 25px; }
+.range-rows-container { display: flex; flex-direction: column; gap: 15px; }
+.range-row { display: flex; align-items: center; gap: 10px; }
+.range-row label { font-size: 0.95rem; font-weight: 500; color: var(--text-color); flex-basis: 80px; text-align: right; }
+.range-row input[type="number"] {
+    width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px;
+    font-family: 'Poppins', sans-serif; font-size: 1rem; text-align: center;
+}
+.range-row input[type="number"]:focus {
+    outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px var(--primary-light);
+}
+.range-separator { color: var(--text-light); font-weight: 600; }
+.modal-footer {
+    padding: 20px 25px; border-top: 1px solid var(--border-color);
+    background-color: #f9fafb; display: flex; gap: 10px;
+    border-bottom-left-radius: var(--border-radius); border-bottom-right-radius: var(--border-radius);
+}
+.range-action-btn {
+    padding: 10px 15px; font-size: 0.9rem; font-weight: 500;
+    border: 1px solid var(--border-color); border-radius: 8px;
+    background-color: white; color: var(--text-color); cursor: pointer;
+    transition: all 0.2s ease; display: flex; align-items: center; gap: 6px;
+}
+.range-action-btn:hover { border-color: var(--primary-color); color: var(--primary-color); }
 #setRangeBtn {
-    padding: 9px 20px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    border: 1px solid var(--primary-color);
-    border-radius: 8px;
-    background-color: var(--primary-light);
-    color: var(--primary-color);
-    cursor: pointer;
-    transition: all 0.2s ease;
+    flex-grow: 1; font-size: 0.95rem; font-weight: 600;
+    border: none; border-radius: 8px;
+    background-color: var(--primary-color); color: white; cursor: pointer; transition: all 0.2s ease;
 }
-
-#setRangeBtn:hover {
-    background-color: var(--primary-color);
-    color: white;
-}
+#setRangeBtn:hover { background-color: #B91C1C; } /* Màu đỏ đậm hơn khi hover */
