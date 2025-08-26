@@ -144,7 +144,7 @@ h3 { margin: 0; font-size: 1.2rem; font-weight: 600; color: var(--text-color); }
 
 /* ===== ĐÃ CẬP NHẬT PHẦN NÀY ===== */
 #soHienThi {
-    font-size: 5.5rem;
+    font-size: 4rem;
     font-weight: 700;
     color: var(--primary-color);
     text-shadow: 0 4px 15px rgba(217, 37, 37, 0.2);
