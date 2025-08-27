@@ -169,13 +169,22 @@ function renderHistory() {
 function hienThiKetQua(ketQua) {
     soHienThiElement.innerHTML = '';
     const displayArray = Array.isArray(ketQua) ? ketQua : [ketQua];
-    displayArray.forEach(so => {
+
+    displayArray.forEach((so, index) => {
         const span = document.createElement('span');
         span.className = 'so-ket-qua';
-        span.textContent = so;
+        // Thêm số 0 trước nếu < 10
+        span.textContent = so < 10 ? `0${so}` : so;
         soHienThiElement.appendChild(span);
+
+        // Thêm dấu phẩy nếu không phải là phần tử cuối
+        if (index < displayArray.length - 1) {
+            const comma = document.createTextNode(', ');
+            soHienThiElement.appendChild(comma);
+        }
     });
 }
+
 
 function capNhatDanhSachDaQuayUI(cacSoMoi, turnClass) {
     cacSoMoi.sort((a, b) => a - b).forEach(so => {
