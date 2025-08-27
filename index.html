@@ -11,18 +11,10 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="site-header">
-        <div class="header-container">
-            <a href="#" class="logo-link">
-                <img src="logo.svg" class="logo-svg" alt="Logo" />
-                <span class="site-title">Hồ Câu Cá Kiên Quân | ĐT: 0908.606.000 - 0987.60.79.60</span>
-            </a>
-        </div>
-    </header>
     <div class="main-wrapper">
         <div class="spinner-column">
             <div class="spinner-header">
-                <h1>Vòng Quay May Mắn</h1>
+                <h1>Hồ Câu Cá Kiên Quân - Lucky Spinner</h1>
                 <div id="clock"></div>
             </div>
             
@@ -41,38 +33,21 @@
                 <button class="mode-button" data-value="4">4 số</button>
                 <button class="mode-button" data-value="5">5 số</button>
             </div>
-            
-            <div class="direct-settings">
-                <h3>Tùy chỉnh khoảng số</h3>
-                <div class="range-settings">
-                    <div class="range-rows-container">
-                        <div class="range-row">
-                            <label for="startNumInput">#1:</label>
-                            <input type="number" id="startNumInput" value="0">
-                            <span class="range-separator">-</span>
-                            <input type="number" id="endNumInput" value="100">
-                        </div>
-                        <div class="range-row" id="range2Container" style="display: none;">
-                            <label for="startNumInput2">#2:</label>
-                            <input type="number" id="startNumInput2" value="101">
-                            <span class="range-separator">-</span>
-                            <input type="number" id="endNumInput2" value="200">
-                        </div>
-                    </div>
+            <div class="range-settings">
+                <div class="input-group">
+                    <label for="startNumInput">Từ số:</label>
+                    <input type="number" id="startNumInput" value="0">
                 </div>
-                <div class="settings-footer">
-                    <input type="checkbox" id="enableRange2Checkbox" style="display: none;">
-                    <button type="button" id="toggleRange2Btn" class="range-action-btn" title="Thêm khoảng số thứ 2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                        <span>Thêm khoảng</span>
-                    </button>
-                    <button id="setRangeBtn">Lưu & Áp dụng</button>
+                <div class="input-group">
+                    <label for="endNumInput">Đến số:</label>
+                    <input type="number" id="endNumInput" value="100">
                 </div>
+                <button id="setRangeBtn">Lưu</button>
             </div>
-             </div>
+        </div>
 
         <div class="history-column">
-            <h2>Các Số Đã Quay <span id="historyCount">(0/101)</span></h2>
+            <h2>Các Số Đã Quay <span id="historyCount">(0/100)</span></h2>
             <ul id="danhSachDaQuay"></ul>
             <div class="history-actions">
                 <button id="nutUndo" title="Quay lại lượt trước">
