@@ -8,13 +8,7 @@ const historyCountElement = document.getElementById('historyCount');
 const clockElement = document.getElementById('clock');
 const nutUndoElement = document.getElementById('nutUndo');
 
-// Các phần tử của Modal
-const openSettingsBtn = document.getElementById('openSettingsBtn');
-const settingsModal = document.getElementById('settingsModal');
-const closeModalBtn = document.getElementById('closeModalBtn');
-const modalOverlay = document.querySelector('.modal-overlay');
-
-// Các phần tử cài đặt bên trong Modal
+// Các phần tử cài đặt (trước đây trong Modal)
 const startNumInput = document.getElementById('startNumInput');
 const endNumInput = document.getElementById('endNumInput');
 const setRangeBtn = document.getElementById('setRangeBtn');
@@ -22,6 +16,7 @@ const enableRange2Checkbox = document.getElementById('enableRange2Checkbox');
 const range2Container = document.getElementById('range2Container');
 const startNumInput2 = document.getElementById('startNumInput2');
 const endNumInput2 = document.getElementById('endNumInput2');
+const toggleRange2Btn = document.getElementById('toggleRange2Btn');
 
 
 // Khai báo biến trạng thái
@@ -33,44 +28,19 @@ let isSecondRangeEnabled = false;
 const turnColorClasses = ['spin-turn-0', 'spin-turn-1', 'spin-turn-2', 'spin-turn-3', 'spin-turn-4', 'spin-turn-5'];
 const STORAGE_KEY = 'modernRandomSpinnerState_v4';
 
-// --- LOGIC ĐÓNG/MỞ MODAL ---
-function openModal() {
-    startNumInput.value = startNum;
-    endNumInput.value = endNum;
-    startNumInput2.value = startNum2;
-    endNumInput2.value = endNum2;
-    enableRange2Checkbox.checked = isSecondRangeEnabled;
-    updateToggleButton();
-    settingsModal.classList.add('active');
-}
-
-function closeModal() {
-    settingsModal.classList.remove('active');
-}
-
-openSettingsBtn.addEventListener('click', openModal);
-closeModalBtn.addEventListener('click', closeModal);
-modalOverlay.addEventListener('click', closeModal);
-
-
 // --- CÁC HÀM TIỆN ÍCH ---
 
-// ===== HÀM MỚI ĐỂ THÊM SỐ 0 =====
 /**
  * Định dạng một số bằng cách thêm số 0 vào trước nếu nó nhỏ hơn 10.
  * @param {number | string} num - Số hoặc chuỗi cần định dạng.
  * @returns {string} Chuỗi đã được định dạng.
  */
 function formatNumber(num) {
-    // Nếu đầu vào không phải là số (ví dụ: chuỗi "Hết số!"), trả về nguyên bản
     if (typeof num !== 'number' || isNaN(num)) {
         return num;
     }
-    // Sử dụng padStart để thêm '0' nếu số có 1 chữ số (0-9)
     return String(num).padStart(2, '0');
 }
-// ===================================
-
 
 function updateClock() {
     const now = new Date();
@@ -127,6 +97,15 @@ function loadState() {
     } else {
         initializeState();
     }
+
+    // Cập nhật các ô input với giá trị đã tải
+    startNumInput.value = startNum;
+    endNumInput.value = endNum;
+    startNumInput2.value = startNum2;
+    endNumInput2.value = endNum2;
+    enableRange2Checkbox.checked = isSecondRangeEnabled;
+    updateToggleButton();
+
     updateHistoryCount();
     updateUndoButtonState();
 }
@@ -163,16 +142,16 @@ function applyRange() {
     const newStart2 = parseInt(startNumInput2.value, 10);
     const newEnd2 = parseInt(endNumInput2.value, 10);
 
-    if (isNaN(newStart) || isNaN(newEnd)) { alert("Vui lòng nhập số hợp lệ cho khoảng 1."); return false; }
-    if (newStart >= newEnd) { alert("Khoảng 1: Số bắt đầu phải nhỏ hơn số kết thúc."); return false; }
+    if (isNaN(newStart) || isNaN(newEnd)) { alert("Vui lòng nhập số hợp lệ cho khoảng 1."); return; }
+    if (newStart >= newEnd) { alert("Khoảng 1: Số bắt đầu phải nhỏ hơn số kết thúc."); return; }
     if (useRange2) {
-        if (isNaN(newStart2) || isNaN(newEnd2)) { alert("Vui lòng nhập số hợp lệ cho khoảng 2."); return false; }
-        if (newStart2 >= newEnd2) { alert("Khoảng 2: Số bắt đầu phải nhỏ hơn số kết thúc."); return false; }
-        if (Math.max(newStart, newStart2) <= Math.min(newEnd, newEnd2)) { alert("Hai khoảng số không được chồng chéo lên nhau."); return false; }
+        if (isNaN(newStart2) || isNaN(newEnd2)) { alert("Vui lòng nhập số hợp lệ cho khoảng 2."); return; }
+        if (newStart2 >= newEnd2) { alert("Khoảng 2: Số bắt đầu phải nhỏ hơn số kết thúc."); return; }
+        if (Math.max(newStart, newStart2) <= Math.min(newEnd, newEnd2)) { alert("Hai khoảng số không được chồng chéo lên nhau."); return; }
     }
     let totalSize = (newEnd - newStart) + 1;
     if (useRange2) totalSize += (newEnd2 - newStart2) + 1;
-    if (totalSize > 5000) { alert("Tổng số lượng trong các khoảng quá lớn (tối đa 5000 số)."); return false; }
+    if (totalSize > 5000) { alert("Tổng số lượng trong các khoảng quá lớn (tối đa 5000 số)."); return; }
 
     if (confirm('Thay đổi cài đặt khoảng số sẽ làm mới vòng quay và xóa lịch sử. Bạn có chắc chắn?')) {
         startNum = newStart;
@@ -190,9 +169,7 @@ function applyRange() {
         nutQuayElement.disabled = false;
         saveState();
         alert(`Đã áp dụng cài đặt khoảng số mới.`);
-        return true;
     }
-    return false;
 }
 
 function initializeNumbers() {
@@ -208,14 +185,11 @@ function initializeState() {
     turnIndex = 0;
 }
 
-
-// ===== HÀM ĐÃ ĐƯỢC CẬP NHẬT =====
 function renderHistory() {
     danhSachDaQuayElement.innerHTML = '';
     lichSuDaQuay.forEach(turn => {
         turn.numbers.sort((a, b) => a - b).forEach(so => {
             const phanTuMoi = document.createElement('li');
-            // Áp dụng định dạng số ở đây
             phanTuMoi.textContent = formatNumber(so);
             phanTuMoi.classList.add(turn.colorClass);
             danhSachDaQuayElement.appendChild(phanTuMoi);
@@ -223,7 +197,6 @@ function renderHistory() {
     });
 }
 
-// ===== HÀM ĐÃ ĐƯỢC CẬP NHẬT =====
 function hienThiKetQua(ketQua) {
     soHienThiElement.innerHTML = '';
     const displayArray = Array.isArray(ketQua) ? ketQua : [ketQua];
@@ -238,12 +211,10 @@ function hienThiKetQua(ketQua) {
 
         const span = document.createElement('span');
         span.className = 'so-ket-qua';
-        // Áp dụng định dạng số ở đây
         span.textContent = formatNumber(so);
         soHienThiElement.appendChild(span);
     });
 }
-
 
 function thucHienQuaySo() {
     const soLuongQuay = currentMode;
@@ -308,6 +279,18 @@ function thucHienQuaySo() {
     }, 1000);
 }
 
+function updateToggleButton() {
+    if (enableRange2Checkbox.checked) {
+        range2Container.style.display = 'flex';
+        toggleRange2Btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg> <span>Xóa khoảng</span>';
+        toggleRange2Btn.title = 'Xóa khoảng số thứ 2';
+    } else {
+        range2Container.style.display = 'none';
+        toggleRange2Btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> <span>Thêm khoảng</span>';
+        toggleRange2Btn.title = 'Thêm khoảng số thứ 2';
+    }
+}
+
 // --- KHỞI TẠO VÀ GÁN SỰ KIỆN ---
 modeButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -320,31 +303,14 @@ modeButtons.forEach(button => {
 nutQuayElement.addEventListener('click', thucHienQuaySo);
 nutResetElement.addEventListener('click', resetState);
 nutUndoElement.addEventListener('click', undoLastSpin);
-
-setRangeBtn.addEventListener('click', () => {
-    if (applyRange()) {
-        closeModal();
-    }
-});
-
-updateClock();
-setInterval(updateClock, 1000);
-loadState();
-
-const toggleRange2Btn = document.getElementById('toggleRange2Btn');
-function updateToggleButton() {
-    if (enableRange2Checkbox.checked) {
-        range2Container.style.display = 'flex';
-        toggleRange2Btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg> <span>Xóa khoảng</span>';
-        toggleRange2Btn.title = 'Xóa khoảng số thứ 2';
-    } else {
-        range2Container.style.display = 'none';
-        toggleRange2Btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> <span>Thêm khoảng</span>';
-        toggleRange2Btn.title = 'Thêm khoảng số thứ 2';
-    }
-}
+setRangeBtn.addEventListener('click', applyRange);
 toggleRange2Btn.addEventListener('click', () => {
     enableRange2Checkbox.checked = !enableRange2Checkbox.checked;
     updateToggleButton();
 });
+
+// --- Tải trạng thái và khởi chạy ---
+updateClock();
+setInterval(updateClock, 1000);
+loadState();
 document.addEventListener('DOMContentLoaded', updateToggleButton);
